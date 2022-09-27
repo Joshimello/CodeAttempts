@@ -1,19 +1,17 @@
 #include <stdio.h>
 
 int main(void) {
-  int inInt;
-  int outBin[32];
-  int i = 0;
+  int num, a, b, c, d;
 
-  scanf("%d", &inInt);
+  scanf("%d", &num);
 
-  while (inInt > 0) {
-    outBin[i] = inInt % 2;
-    inInt = inInt / 2;
-    i++;
-  }
+  a = num % 2;
+  num /= 2;
+  b = num % 2;
+  num /= 2;
+  c = num % 2;
+  num /= 2;
+  d = num % 2;
 
-  for (int j = i - 1; j >= 0; j--)
-    printf("%d", outBin[j]);
-  printf("\n");
+  printf("%d%d%d%d", d, c, b, a);
 }
