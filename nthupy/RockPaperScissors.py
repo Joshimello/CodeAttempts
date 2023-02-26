@@ -1,16 +1,27 @@
 import random
-cpu = random.choice(['r', 'p', 's'])
-while(True):
-  player = input('rock, paper, scissors? ')
-  if cpu == player:
-    print(f'I am also {cpu} - tied!')
-  elif (cpu =='r' and player == 'p') or (cpu =='p' and player == 's') or (cpu =='s' and player == 'r'):
-    print(f'I am {cpu} - I lose!')
-  elif (cpu =='p' and player == 'r') or (cpu =='s' and player == 'p') or (cpu =='r' and player == 's'):
-    print(f'I am {cpu} - you lose!')
-  else:
-    res = input(f'{player} is invalid - try again? ')
-    if(res == 'quit'):
-      print('bye')
-      break
+
+print("rock, paper, scissors?")
+
+while True:
+    user_choice = input()
+    if user_choice == "quit":
+        print("bye")
+        break
     
+    choices = ["rock", "paper", "scissors"]
+    if user_choice not in choices:
+        print(f"{user_choice} is invalid - try again?")
+        continue
+    
+    computer_choice = random.choice(choices)
+
+    if user_choice == computer_choice:
+        print(f"I am also {computer_choice} - tied!")
+    elif user_choice == "rock" and computer_choice == "scissors":
+        print(f"I am {computer_choice} - you win!")
+    elif user_choice == "paper" and computer_choice == "rock":
+        print(f"I am {computer_choice} - you win!")
+    elif user_choice == "scissors" and computer_choice == "paper":
+        print(f"I am {computer_choice} - you win!")
+    else:
+        print(f"I am {computer_choice} - I win!")
