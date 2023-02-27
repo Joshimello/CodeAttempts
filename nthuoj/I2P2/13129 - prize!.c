@@ -42,26 +42,29 @@ void solveJosephus(int n, int k){
         int m;
         scanf("%d", &m);
 
-        m %= n;
-        if(m == 0) m = n;
+        int isClock = m % 2;
 
-        if(m % 2 == 1){
+        m %= n;
+        if(!m) m = n;
+
+        if(isClock){
             curNode = nextNode;
             while(--m) curNode = curNode->next;
-            printf("%d\n", curNode->number);
         }
 
-        else{
+        if(!isClock){
             curNode = prevNode;
             while(--m) curNode = curNode->prev;
-            printf("%d\n", curNode->number);
         }
 
+        printf("%d\n", curNode->number);
         prevNode = curNode->prev;
         nextNode = curNode->next;
         free(curNode);
         prevNode->next = nextNode;
         nextNode->prev = prevNode;
+        
+        n--;
     }
 }
 

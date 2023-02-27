@@ -6,9 +6,29 @@
 typedef struct _node{
     int val;
     struct _node *next;
+    struct _node *prev;
 } node;
 
 // return true value if the linked list is a palindrome, otherwise false
+
+bool is_palindrome(node *head){
+    node * prevNode = NULL;
+    for(node * temp = head; temp != NULL; temp = temp->next){
+        temp->prev = prevNode;
+        prevNode = temp;
+    }
+
+    // prevNode is now the last node
+    while(head != NULL){
+        if(head->val != prevNode->val) return false;
+        head = head->next;
+        prevNode = prevNode->prev;
+    }
+
+    return true;
+}
+
+/* lazy method
 bool is_palindrome(node *head){
     int n[100000], i = 0;
     for(node * temp = head; temp != NULL; temp = temp->next){
@@ -22,6 +42,7 @@ bool is_palindrome(node *head){
 
     return true;
 }
+*/
 
 
 // main
