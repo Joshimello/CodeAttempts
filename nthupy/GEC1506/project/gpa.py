@@ -1,4 +1,4 @@
-import os, sys, bisect, pickle
+import os, sys, bisect, pickle, statistics
 
 CLEARCMD = 'cls' #vscode change to 'clear'
 
@@ -45,12 +45,19 @@ while True:
   if len(courses) == 0:
     print('no courses added yet~')
     print()
-  for course in courses.values():
-    g1, g2, g3 = course.grades
-    print(f'{course.name} ({course.credits} creds): {round(g1, 1)}% | {g3} | {g2}')
-    for item, score in course.scores.items():
-      print(f' - {item} ({course.weights[item]}%): {score}%')
-    print(f'{round(course.passing, 1)}% to reach goal ({course.goal}%)')
+  else:
+    for course in courses.values():
+      g1, g2, g3 = course.grades
+      print(f'{course.name} ({course.credits} creds): {round(g1, 1)}% | {g3} | {g2}')
+      for item, score in course.scores.items():
+        print(f' - {item} ({course.weights[item]}%): {score}%')
+      print(f'{round(course.passing, 1)}% to reach goal ({course.goal}%)')
+      print()
+
+    t_credits = sum([i.credits for i in courses.values()])
+    t_score = statistics.mean([i.grades[0] for i in courses.values()])
+    t_gpa = statistics.mean([i.grades[2] for i in courses.values()])
+    print(f'total ({t_credits}): {t_score}% | {t_gpa}')
     print()
 
   print('——————————— commands ———————————')
@@ -69,7 +76,7 @@ while True:
       weights = {}
       for i in range(0, len(temp), 2):
         weights[temp[i]] = int(temp[i + 1])
-      courses[name] = Course(name, credits, weights)
+      courses[name] = Course(name, int(credits), weights)
 
     case 'set':
       name, item, score = params[1:]
