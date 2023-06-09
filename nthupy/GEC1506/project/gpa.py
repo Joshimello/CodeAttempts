@@ -1,4 +1,5 @@
 import os, sys, bisect, pickle, statistics
+import matplotlib.pyplot as plt
 
 CLEARCMD = 'cls' #vscode change to 'clear'
 
@@ -17,19 +18,22 @@ class Course:
   @property
   def grades(self):
     percentage_grade = sum([v * self.weights[k] / 100 for k, v in self.scores.items() if v != None])
-    grade_position = bisect.bisect_right(benchmark_percentage, percentage_grade)
+    rounded_grade = round(percentage_grade)
+    grade_position = bisect.bisect_right(benchmark_percentage, rounded_grade)
     letter_grade = benchmark_letter[grade_position - 1]
     gpa_grade = benchmark_gpa[grade_position - 1]
-    return percentage_grade, letter_grade, gpa_grade
+    return rounded_grade, letter_grade, gpa_grade
 
   @property
   def passing(self):
-    percentage_grade = sum([v * self.weights[k] / 100 for k, v in self.scores.items() if v != None])
+    percentage_grade = self.grades[0]
     none_weights = sum([self.weights[k] for k, v in self.scores.items() if v == None])
+    delta_goal = 0
     if none_weights > 0:
-      return (self.goal - percentage_grade) * 100 / none_weights
+      delta_goal = (self.goal - percentage_grade) * 100 / none_weights 
     else:
-      return self.goal - percentage_grade
+      delta_goal = self.goal - percentage_grade
+    return delta_goal
 
 courses = {}
 try:
@@ -48,10 +52,10 @@ while True:
   else:
     for course in courses.values():
       g1, g2, g3 = course.grades
-      print(f'{course.name} ({course.credits} creds): {round(g1, 1)}% | {g3} | {g2}')
+      print(f'{course.name} ({course.credits} creds): {g1}% | {g3} | {g2}')
       for item, score in course.scores.items():
         print(f' - {item} ({course.weights[item]}%): {score}%')
-      print(f'{round(course.passing, 1)}% to reach goal ({course.goal}%)')
+      print(f'{course.goal}% (goal) - {course.goal - course.passing}% (w_avg) = {course.passing}% to reach goal')
       print()
 
     t_credits = sum([i.credits for i in courses.values()])
@@ -64,6 +68,7 @@ while True:
   print(': add [name] [credits] [weights]')
   print(': set [course] [item] [score]')
   print(': goal [course] [score]')
+  print(': chart')
   print(': q')
   print()
 
@@ -86,8 +91,20 @@ while True:
       name, score = params[1:]
       courses[name].goal = int(score)
 
+    case 'chart':
+      course_names = list(courses.keys())
+      course_scores = [course.grades[0] for course in courses.values()]
+
+      plt.bar(course_names, course_scores)
+      plt.xlabel('Course')
+      plt.ylabel('Percentage Grade')
+      plt.title('Grades for Courses')
+      plt.xticks(rotation=45)
+      plt.show()
+
     case 'q':
       with open('gpa_save.pkl', 'wb') as save:
         pickle.dump(courses, save, pickle.HIGHEST_PROTOCOL)
       os.system(CLEARCMD)
       exit()
+
