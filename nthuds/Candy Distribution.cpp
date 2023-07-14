@@ -1,30 +1,28 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-using ll = long long;
+bool f(int M, vector<int>& A, int m){
+  long S = 0;
+  for(int& i : A){
+    S += (i+M-1)/M;
+  }
+  if(S <= m) return true;
+  else return false;
+}
 int main(){
-  ll n, m; cin >> n >> m;
-  vector<ll> v;
-  ll L = 0, R = 0;
-  for(ll i = 0; i < n; i++){
-    ll t; cin >> t;
-    v.push_back(t);
-    R = max(R, t);
+  vector<int> A;
+  int n, m; cin >> n >> m;
+  int mv = -1;
+  for(int i = 0; i < n; i++){
+    int t; cin >> t;
+    A.push_back(t);
+    mv = max(mv, t);
   }
-  if(m == n){
-    cout << R << endl;
-    return 0;
-  }
+  int L = 1, R = mv;
   while(L < R){
-    ll M = (L + R) / 2;
-
-    ll count = 0;
-    for(ll& i : v){
-      if(i > M) count++;
-    }
-
-    if(count <= m-n) R = M;
-    else L = M + 1;
+    int M = (L+R)/2;
+    if(f(M, A, m)) R = M;
+    else L = M+1;
   }
   cout << R << endl;
 }
