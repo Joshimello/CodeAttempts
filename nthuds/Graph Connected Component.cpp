@@ -1,22 +1,39 @@
 #include <iostream>
 #include <vector>
+#include <queue>
 using namespace std;
 int main(){
   int test; cin >> test;
   while(test--){
     int n, m; cin >> n >> m;
-    vector<int> V;
-    for(int i = 0; i <= n; i++){
-      V.push_back(i);
-    }
+    vector<vector<int>> adj(n+1);
     while(m--){
-      int a, b; cin >> a >> b;
-      int x = max(a, b), y = min(a, b);
-      V[x] = V[y];
+      int u, v; cin >> u >> v;
+      adj[u].push_back(v);
+      adj[v].push_back(u);
     }
-    for(int& i : V){
-      cout << i << ' ';
+
+    vector<bool> vst(n+1, false);
+
+    int ans = 0;
+    queue<int> q;
+    for(int i = 1; i <= n; i++){
+      if(vst[i]) continue;
+      ans++;
+
+      q.push(i);
+      while(q.size()){
+        int f = q.front();
+        vst[f] = true;
+        q.pop();
+        for(int& j : adj[f]){
+          if(vst[j]) continue;
+          q.push(j);
+        }
+      }
+
     }
-    cout << endl;
+
+    cout << ans << endl;
   }
 }
