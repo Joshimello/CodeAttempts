@@ -7,18 +7,19 @@ typedef struct _Node {
 } Node;
 
 void reverse(Node *node_l, Node *node_r){
+
+    int len = 0;
+    for(Node * temp = node_l; temp != node_r; temp = temp->next, len++);
     
-    Node * end = node_r->next;
-    printf("[%d]", end->id);
+    Node * prev = node_l;
+    Node * curr = prev->next;
 
-    Node * temp = node_l;
-    while(temp != end){
-        temp = temp->next;
-        temp->next = end;
-        end = temp;
+    while(len--){
+        Node * forw = curr->next;
+        curr->next = forw->next;
+        forw->next = prev->next;
+        prev->next = forw;
     }
-
-    node_l->next = end;
 }
 
 int main() {

@@ -1,0 +1,2 @@
+10000
+[(-200, 'first', 'food'), (100, 'second', 'drink'), (200, 'third', 'bus'), (300, 'fourth', 'bonus'), (-200, 'first', 'food'), (100, 'second', 'drink'), (200, 'third', 'bus'), (300, 'fourth', 'bonus')]
